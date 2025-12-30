@@ -2,6 +2,7 @@ import { Switch, Route } from "wouter";
 import { AppStateProvider } from "@/state/AppStateProvider";
 import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
+import FunControls from "@/components/FunControls";
 
 // Pages
 import Home from "@/pages/Home";
@@ -33,6 +34,7 @@ function App() {
   return (
     <AppStateProvider>
       <Toaster />
+      <FunControls />
       <Router />
     </AppStateProvider>
   );

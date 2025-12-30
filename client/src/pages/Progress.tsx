@@ -1,8 +1,15 @@
 import { PageShell } from "@/components/PageShell";
 import { useAppState } from "@/state/AppStateProvider";
 import { differenceInDays, format } from "date-fns";
-import { Flame, Trophy, Calendar, AlertCircle } from "lucide-react";
+import { Flame, Trophy, Calendar, AlertCircle, Sparkles, PartyPopper } from "lucide-react";
 import { motion } from "framer-motion";
+
+type Badge = {
+  title: string;
+  description: string;
+  icon: typeof Flame;
+  accent: string;
+};
 
 export default function Progress() {
   const { state } = useAppState();
@@ -18,6 +25,34 @@ export default function Progress() {
   
   const wins = state.logs.filter(l => l.outcome === 'win').length;
   const slips = state.logs.filter(l => l.outcome === 'slip').length;
+  const reviewCount = Object.keys(state.weeklyReviews).length;
+
+  const badges = [
+    daysClean >= 7 && {
+      title: "Flamekeeper",
+      description: "7+ day streak in motion",
+      icon: Flame,
+      accent: "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-100"
+    },
+    wins >= 5 && {
+      title: "Momentum Maker",
+      description: "Five logged wins — stacking bricks",
+      icon: Trophy,
+      accent: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-100"
+    },
+    reviewCount > 0 && {
+      title: "Reflector",
+      description: "Completed a weekly review",
+      icon: Calendar,
+      accent: "bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-100"
+    },
+    state.logs.length >= 10 && {
+      title: "Historian",
+      description: "10+ HALT check-ins captured",
+      icon: PartyPopper,
+      accent: "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-100"
+    }
+  ].filter(Boolean) as Badge[];
 
   return (
     <PageShell showBack title="Your Journey">
@@ -57,6 +92,32 @@ export default function Progress() {
             <span className="text-xs text-muted-foreground uppercase font-bold">Learning Moments</span>
           </div>
         </div>
+
+        {/* Badges */}
+        {badges.length > 0 && (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-primary" />
+              <h3 className="font-bold text-lg">Unlocked vibes</h3>
+            </div>
+            <div className="grid grid-cols-1 gap-3">
+              {badges.map((badge) => (
+                <div
+                  key={badge.title}
+                  className={`flex items-center gap-4 rounded-2xl border border-border bg-card p-4 shadow-sm`}
+                >
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${badge.accent}`}>
+                    <badge.icon className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <p className="font-bold">{badge.title}</p>
+                    <p className="text-sm text-muted-foreground">{badge.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Recent History List */}
         <div className="space-y-4">
