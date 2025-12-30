@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 function createConfetti(count = 20) {
   const emojis = ["🎉", "✨", "🎈", "💜", "😄", "🥳"];
@@ -68,6 +68,16 @@ function showBadge(name = "Fun Unlocked") {
 }
 
 export default function FunControls() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const handler = (ev: MediaQueryListEvent) => setVisible(ev.matches);
+    setVisible(mq.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "c" || e.key === "C") createConfetti(30);
@@ -77,6 +87,8 @@ export default function FunControls() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  if (!visible) return null;
 
   return (
     <div style={{ position: "fixed", right: 18, bottom: 18, zIndex: 9998 }}>
