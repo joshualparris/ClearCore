@@ -5,10 +5,19 @@ import { useAppState } from "@/state/AppStateProvider";
 import { responseActions } from "@/content/responseActions";
 import { cn } from "@/lib/utils";
 import { Slider } from "@/components/ui/slider";
+import { useMemo } from "react";
 
 export default function Log() {
   const { dispatch } = useAppState();
   const [, setLocation] = useLocation();
+  const offlineAlternatives = useMemo(() => [
+    "Short walk outside",
+    "Text/call a friend",
+    "Quick chore or tidy",
+    "Play music/worship song",
+    "Board/card game with someone",
+    "Stretch or 30 jumping jacks",
+  ], []);
 
   const [halt, setHalt] = useState({
     hungry: false,
@@ -96,6 +105,18 @@ export default function Log() {
             <span>Just a thought</span>
             <span>Overwhelming</span>
           </div>
+          {urge[0] >= 4 && (
+            <div className="mt-3 bg-muted/40 border border-border rounded-xl p-3 space-y-1">
+              <p className="text-xs uppercase tracking-[0.08em] font-bold text-muted-foreground">Try a safe swap now</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                {offlineAlternatives.slice(0,4).map((item, idx) => (
+                  <div key={idx} className="bg-card border border-border/50 rounded-lg px-2 py-2">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Trigger Note */}

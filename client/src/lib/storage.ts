@@ -18,7 +18,14 @@ const DEFAULT_STATE: AppState = {
       { id: '2', title: 'Charge phone outside bedroom', enabled: true },
       { id: '3', title: 'Content filters active', enabled: true },
       { id: '4', title: 'Open door policy', enabled: false },
-    ]
+    ],
+    screenTimeCapMinutes: 120,
+    noScreensInBedroom: true,
+    noScreensAtMeals: true,
+    dockReminderTime: '20:00',
+    hspQuietMode: false,
+    hspRechargeReminder: false,
+    hspSmallGroupMode: false
   },
   daily: {},
   logs: [],

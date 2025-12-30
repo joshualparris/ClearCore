@@ -3,6 +3,7 @@ import { useAppState } from "@/state/AppStateProvider";
 import { differenceInDays, format } from "date-fns";
 import { Flame, Trophy, Calendar, AlertCircle, Sparkles, PartyPopper } from "lucide-react";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 type Badge = {
   title: string;
@@ -11,8 +12,63 @@ type Badge = {
   accent: string;
 };
 
+type DailyMetrics = {
+  screensOut: boolean;
+  morningStack: boolean;
+  exerciseBreath: boolean;
+  eveningConnect: boolean;
+  temptationsResisted: number;
+  relapses: number;
+  mood: number;
+  prayerScripture: boolean;
+};
+
+const METRICS_STORAGE_KEY = "pure-heart-daily-metrics";
+
+function useDailyMetrics(): [DailyMetrics, (next: DailyMetrics) => void] {
+  const today = new Date().toISOString().slice(0, 10);
+  const [metrics, setMetrics] = useState<DailyMetrics>({
+    screensOut: false,
+    morningStack: false,
+    exerciseBreath: false,
+    eveningConnect: false,
+    temptationsResisted: 0,
+    relapses: 0,
+    mood: 3,
+    prayerScripture: false,
+  });
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(METRICS_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed[today]) {
+          setMetrics(parsed[today]);
+        }
+      }
+    } catch (err) {
+      console.warn("Failed to load metrics", err);
+    }
+  }, [today]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(METRICS_STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      parsed[today] = metrics;
+      localStorage.setItem(METRICS_STORAGE_KEY, JSON.stringify(parsed));
+    } catch (err) {
+      console.warn("Failed to save metrics", err);
+    }
+  }, [metrics, today]);
+
+  return [metrics, setMetrics];
+}
+
 export default function Progress() {
   const { state } = useAppState();
+  const [metrics, setMetrics] = useDailyMetrics();
 
   const lastSlip = state.lastSlipAtISO ? new Date(state.lastSlipAtISO) : null;
   // If no slip ever, calculate from first log or just generic "start"
@@ -72,6 +128,61 @@ export default function Progress() {
             </div>
             <span className="text-white/80 font-medium">Days of Freedom</span>
           </motion.div>
+        </div>
+
+        {/* Daily Metrics Checklist */}
+        <div className="bg-card border border-border rounded-3xl p-5 shadow-sm space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs uppercase font-bold text-muted-foreground tracking-[0.08em]">Today’s checklist</p>
+              <p className="text-lg font-bold">Recovery hygiene</p>
+            </div>
+            <span className="text-xs text-muted-foreground">{format(new Date(), "EEEE, MMM d")}</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <CheckboxRow
+              label="Devices out of bedroom/bathroom"
+              checked={metrics.screensOut}
+              onChange={(v) => setMetrics({ ...metrics, screensOut: v })}
+            />
+            <CheckboxRow
+              label="Morning stack done"
+              checked={metrics.morningStack}
+              onChange={(v) => setMetrics({ ...metrics, morningStack: v })}
+            />
+            <CheckboxRow
+              label="Exercise/breathing done"
+              checked={metrics.exerciseBreath}
+              onChange={(v) => setMetrics({ ...metrics, exerciseBreath: v })}
+            />
+            <CheckboxRow
+              label="Evening connect with spouse"
+              checked={metrics.eveningConnect}
+              onChange={(v) => setMetrics({ ...metrics, eveningConnect: v })}
+            />
+            <CheckboxRow
+              label="Prayer/Scripture today"
+              checked={metrics.prayerScripture}
+              onChange={(v) => setMetrics({ ...metrics, prayerScripture: v })}
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <NumberRow
+              label="Temptations resisted"
+              value={metrics.temptationsResisted}
+              onChange={(v) => setMetrics({ ...metrics, temptationsResisted: v })}
+            />
+            <NumberRow
+              label="Relapses"
+              value={metrics.relapses}
+              onChange={(v) => setMetrics({ ...metrics, relapses: v })}
+            />
+            <MoodRow
+              label="Mood (1–5)"
+              value={metrics.mood}
+              onChange={(v) => setMetrics({ ...metrics, mood: v })}
+            />
+          </div>
         </div>
 
         {/* Stats Grid */}
@@ -153,5 +264,74 @@ export default function Progress() {
         </div>
       </div>
     </PageShell>
+  );
+}
+
+function CheckboxRow({
+  label,
+  checked,
+  onChange,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: (value: boolean) => void;
+}) {
+  return (
+    <label className="flex items-center gap-3 bg-muted/40 dark:bg-white/5 rounded-xl px-3 py-2 border border-border/50 cursor-pointer">
+      <input
+        type="checkbox"
+        className="w-4 h-4 accent-primary"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+      />
+      <span className="text-sm">{label}</span>
+    </label>
+  );
+}
+
+function NumberRow({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+}) {
+  return (
+    <label className="flex flex-col gap-1 bg-muted/40 dark:bg-white/5 rounded-xl px-3 py-2 border border-border/50">
+      <span className="text-sm">{label}</span>
+      <input
+        type="number"
+        min={0}
+        className="bg-background border border-border rounded-lg px-2 py-1 text-sm"
+        value={value}
+        onChange={(e) => onChange(Math.max(0, Number(e.target.value)))}
+      />
+    </label>
+  );
+}
+
+function MoodRow({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+}) {
+  return (
+    <label className="flex flex-col gap-1 bg-muted/40 dark:bg-white/5 rounded-xl px-3 py-2 border border-border/50">
+      <span className="text-sm">{label}</span>
+      <input
+        type="range"
+        min={1}
+        max={5}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+      />
+      <div className="text-xs text-muted-foreground">Current: {value}/5</div>
+    </label>
   );
 }

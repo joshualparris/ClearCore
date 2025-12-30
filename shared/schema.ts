@@ -16,7 +16,14 @@ export const UserSettingsSchema = z.object({
   accountabilityPhone: z.string().optional(),
   guardrails: z.array(GuardrailItemSchema),
   theme: z.enum(["system", "light", "dark"]),
-  lastWeeklyReviewWeek: z.string().optional()
+  lastWeeklyReviewWeek: z.string().optional(),
+  screenTimeCapMinutes: z.number().optional(),
+  noScreensInBedroom: z.boolean().optional(),
+  noScreensAtMeals: z.boolean().optional(),
+  dockReminderTime: z.string().optional(),
+  hspQuietMode: z.boolean().optional(),
+  hspRechargeReminder: z.boolean().optional(),
+  hspSmallGroupMode: z.boolean().optional()
 });
 
 export const DailyEntrySchema = z.object({

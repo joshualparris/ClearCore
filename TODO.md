@@ -45,3 +45,10 @@
 - Alternatives list: quick-suggest offline activities (board games, sports, library, chores, meet friends) when a cap is hit or during high-risk windows.
 - Accountability prompt: “ask someone to remind you” / ally nudge to log off; optional “stand to browse” micro-friction tip for short lookups.
 - Bedtime guidance: reinforce bedtime window (aim 9pm–midnight), pre-bed calming routine (no screen, warm shower/stretch/prayer/reading), and consistent wake time; optional sunrise/early-morning reward prompt.
+
+# Additional items (from Josh - Soul Tour 2024.docx)
+
+- HSP accommodations: noise-canceling/quiet mode toggle, scent/ventilation notes, small-group mode with recharge reminders after large gatherings.
+- Communication/repair: prompt for a walk-cooldown repair option; reinforce scheduled check-ins/active listening with spouse; validate feelings.
+- Stress coping menu: prayer + movement + talk-to-spouse/ally alternative when tempted or anxious; “text ally now” nudge (Lucas/Kristy placeholder).
+- Work/family boundaries: planner to set work/family blocks and stick to end-of-day cutoff; highlight “no screens in bedroom/bathroom” for decompression.

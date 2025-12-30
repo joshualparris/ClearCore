@@ -121,6 +121,30 @@ export default function Daily() {
           )}
         </AnimatePresence>
       </div>
+
+      <div className="mt-8 space-y-4">
+        <div className="bg-card border border-border rounded-2xl p-4">
+          <p className="text-xs uppercase tracking-[0.08em] font-bold text-muted-foreground mb-2">Habit stacks</p>
+          <div className="grid gap-3 text-sm text-muted-foreground">
+            <div className="bg-muted/40 rounded-xl p-3">
+              <p className="font-semibold text-foreground">Morning</p>
+              <p>After alarm → Psalm/prayer (2 min) → water → 5–10 min movement.</p>
+            </div>
+            <div className="bg-muted/40 rounded-xl p-3">
+              <p className="font-semibold text-foreground">Lunch</p>
+              <p>After eating → Scripture/devotional → 5 min deep breathing → reward with coffee/tea.</p>
+            </div>
+            <div className="bg-muted/40 rounded-xl p-3">
+              <p className="font-semibold text-foreground">Evening</p>
+              <p>After kids in bed → connect with Kristy (talk/cuddle highs/lows) → gratitude journal → light reading. No screens in bed.</p>
+            </div>
+            <div className="bg-muted/40 rounded-xl p-3">
+              <p className="font-semibold text-foreground">Shower trigger</p>
+              <p>Music/podcast on → phone stays outside → 30s cold finish.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </PageShell>
   );
 }

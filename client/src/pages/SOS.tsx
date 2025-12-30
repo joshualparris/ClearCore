@@ -9,6 +9,24 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Phone, ShieldCheck, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const offlineAlternatives = [
+  "Short walk outside",
+  "Call or text a friend",
+  "Do 30 jumping jacks or push-ups",
+  "Board/card game with someone",
+  "Tidy one small area",
+  "Make tea and read 2 pages",
+  "Play a worship song and hum along",
+];
+
+const verseToolkit = [
+  { ref: "1 Cor 10:13", text: "God is faithful; He will provide a way out." },
+  { ref: "Psalm 119:9", text: "How can a young man keep his way pure? By guarding it according to Your word." },
+  { ref: "2 Cor 10:5", text: "Take every thought captive to obey Christ." },
+  { ref: "Romans 8:1", text: "There is now no condemnation for those in Christ Jesus." },
+  { ref: "Phil 4:8", text: "Whatever is true, noble, right, pure… think about such things." },
+];
+
 export default function SOS() {
   const { state, dispatch } = useAppState();
   const [, setLocation] = useLocation();
@@ -45,6 +63,7 @@ export default function SOS() {
   const accountabilityLink = state.settings.accountabilityPhone 
     ? `sms:${state.settings.accountabilityPhone}?body=Hey, I'm struggling right now. Can you pray for me?`
     : null;
+  const questOfDay = offlineAlternatives[new Date().getDate() % offlineAlternatives.length];
 
   return (
     <PageShell 
@@ -90,6 +109,20 @@ export default function SOS() {
               <h2 className="text-2xl font-display font-medium text-white/90">Just breathe.</h2>
               <p className="text-white/60 mt-2">This urge will pass. Ride the wave.</p>
             </div>
+
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3">
+              <div className="text-xs uppercase tracking-[0.08em] font-bold text-white/80 flex items-center gap-2">
+                First 90 seconds
+              </div>
+              <ol className="space-y-2 text-sm text-white/80 list-decimal list-inside">
+                <li>Pause &amp; breathe: 4-4-6 ×5</li>
+                <li>HALT: Hungry / Angry / Lonely / Tired?</li>
+                <li>Pray or recite a verse</li>
+                <li>Cold: splash face or 30s cold shower</li>
+                <li>Move: brisk walk, stretch, 30 jumping jacks</li>
+                <li>Text ally: “Tempted now, back in 10”</li>
+              </ol>
+            </div>
             
             <BreathingCircle durationSeconds={60} />
             
@@ -117,6 +150,48 @@ export default function SOS() {
             <div>
               <h2 className="text-2xl font-bold text-white mb-2">Do one thing.</h2>
               <p className="text-white/60">Don't fight the urge directly. Displace it.</p>
+            </div>
+
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-2">
+              <p className="text-xs uppercase tracking-[0.08em] font-bold text-white/70">Mini quest of the moment</p>
+              <p className="text-sm text-white">{questOfDay}</p>
+            </div>
+
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-2">
+              <p className="text-xs uppercase tracking-[0.08em] font-bold text-white/70">Grounding — 5-4-3-2-1</p>
+              <p className="text-sm text-white/80">Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste. Do it slowly to reset your nervous system.</p>
+            </div>
+
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-2">
+              <p className="text-xs uppercase tracking-[0.08em] font-bold text-white/70">Rapid response</p>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <button
+                  onClick={() => handleSafe()}
+                  className="bg-white/10 hover:bg-white/20 text-white rounded-xl px-3 py-2 text-left transition-colors"
+                >
+                  HALT check + snack/water
+                </button>
+                <button
+                  onClick={() => handleSafe(responseActions[0].id)}
+                  className="bg-white/10 hover:bg-white/20 text-white rounded-xl px-3 py-2 text-left transition-colors"
+                >
+                  Cold/ice + 30s brisk walk
+                </button>
+                <button
+                  onClick={() => setMode('breathing')}
+                  className="bg-white/10 hover:bg-white/20 text-white rounded-xl px-3 py-2 text-left transition-colors"
+                >
+                  3 min breathing reset
+                </button>
+                {accountabilityLink && (
+                  <a
+                    href={accountabilityLink}
+                    className="bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl px-3 py-2 text-center transition-colors flex items-center justify-center gap-2"
+                  >
+                    <Phone className="w-4 h-4" /> Text ally now
+                  </a>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-3 overflow-y-auto max-h-[50vh]">
@@ -155,6 +230,29 @@ export default function SOS() {
                 >
                   I Slipped
                 </button>
+              </div>
+            </div>
+
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-2">
+              <p className="text-xs uppercase tracking-[0.08em] font-bold text-white/70">Safe swaps</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-white/80">
+                {offlineAlternatives.slice(0, 6).map((item, idx) => (
+                  <div key={idx} className="bg-white/10 rounded-lg px-3 py-2">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-2">
+              <p className="text-xs uppercase tracking-[0.08em] font-bold text-white/70">Verse toolkit</p>
+              <div className="space-y-1 text-sm text-white/80">
+                {verseToolkit.map(v => (
+                  <div key={v.ref} className="bg-white/10 rounded-lg px-3 py-2">
+                    <p className="font-semibold">{v.ref}</p>
+                    <p>{v.text}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </motion.div>

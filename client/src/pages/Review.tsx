@@ -14,6 +14,7 @@ export default function Review() {
   const [patterns, setPatterns] = useState("");
   const [gratitude, setGratitude] = useState("");
   const [focus, setFocus] = useState("");
+  const [marriageNotesOpen, setMarriageNotesOpen] = useState(false);
 
   const weekISO = format(startOfWeek(new Date()), 'yyyy-\'W\'ww');
 
@@ -110,6 +111,48 @@ export default function Review() {
             <h2 className="text-2xl font-bold font-display mb-2">{steps[step].title}</h2>
             <p className="text-muted-foreground mb-6">{steps[step].desc}</p>
             {steps[step].content}
+        </div>
+
+        <div className="space-y-3">
+          <button
+            onClick={() => setMarriageNotesOpen(v => !v)}
+            className="w-full bg-secondary/30 border border-border rounded-xl p-3 text-left flex justify-between items-center"
+          >
+            <div>
+              <p className="font-bold">Marriage meeting &amp; affection plan</p>
+              <p className="text-xs text-muted-foreground">10–20 min template + non-sexual affection baseline.</p>
+            </div>
+            <span className="text-xs text-muted-foreground">{marriageNotesOpen ? "Hide" : "Show"}</span>
+          </button>
+          {marriageNotesOpen && (
+            <div className="bg-card border border-border rounded-xl p-4 space-y-3 text-sm text-muted-foreground">
+              <div>
+                <p className="font-semibold text-foreground">Weekly 20-min meeting</p>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>1 min: Centering breath + short prayer.</li>
+                  <li>4 min: Gratitudes (2 each).</li>
+                  <li>4 min: Logistics (kids, chores, money, calendars).</li>
+                  <li>4 min: Support lane (one need, one boundary each).</li>
+                  <li>4 min: Recovery status (GREEN/AMBER/RED). No interrogation.</li>
+                  <li>2 min: Appreciation + prayer.</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-semibold text-foreground">Non-sexual affection baseline</p>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Morning: 15s hug, neutral zones only.</li>
+                  <li>Midday: Hand squeeze or 10s eye contact.</li>
+                  <li>Evening: 5-min side-by-side sit; no escalation.</li>
+                  <li>One act of service daily (quietly).</li>
+                  <li>One 20–30 min micro-date weekly (walk/tea/chat).</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-semibold text-foreground">Conflict guardrail</p>
+                <p>“No sexual soothing after conflict” — repair first; 12h calm before intimacy.</p>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="mt-auto flex gap-4">
