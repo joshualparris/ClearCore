@@ -50,7 +50,7 @@ export function PageShell({
     <div className={cn(
       "min-h-screen bg-background flex flex-col mx-auto shadow-2xl shadow-black/5 overflow-hidden",
       isWide && "max-w-5xl md:rounded-3xl md:border md:border-border/30 md:shadow-xl",
-      !isWide && !isResponsive && "max-w-md border-x border-border/40",
+      !isWide && !isResponsive && "w-full max-w-md md:max-w-2xl border-x border-border/40",
       isResponsive && "w-full max-w-md md:max-w-4xl lg:max-w-5xl border-x border-border/40 md:border md:border-border/30 md:rounded-3xl"
     )}>
       <header className="px-6 md:px-8 py-5 flex items-center justify-between sticky top-0 bg-background/80 backdrop-blur-md z-10 border-b border-border/20">
