@@ -13,6 +13,7 @@ import Progress from "@/pages/Progress";
 import Settings from "@/pages/Settings";
 import Review from "@/pages/Review";
 import SlipResponse from "@/pages/SlipResponse";
+import AllPages from "@/pages/AllPages";
 
 function Router() {
   return (
@@ -25,6 +26,7 @@ function Router() {
       <Route path="/settings" component={Settings} />
       <Route path="/review" component={Review} />
       <Route path="/slip-response" component={SlipResponse} />
+      <Route path="/all-pages" component={AllPages} />
       <Route component={NotFound} />
     </Switch>
   );
