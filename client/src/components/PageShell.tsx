@@ -71,6 +71,12 @@ export function PageShell({
         </div>
         {action && <div>{action}</div>}
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setLocation('/all-pages')}
+            className="rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-semibold text-foreground transition-colors hover:bg-muted"
+          >
+            All pages
+          </button>
           <span className="text-xs text-muted-foreground hidden sm:inline">Layout</span>
           <div className="flex rounded-full border border-border/60 overflow-hidden bg-muted/60">
             <button
